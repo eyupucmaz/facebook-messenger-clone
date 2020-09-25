@@ -6,8 +6,27 @@
 	border-bottom-right-radius: 999px;
 	margin-bottom: 8px;
 } */
-.message__card {
+.message {
 	padding: 10px;
-	margin: 10px;
+	/* margin: 5px; */
 	width: fit-content;
+}
+.message__user {
+	margin-left: auto;
+	color: #fff;
+	text-align: left !important;
+}
+
+.message__userCard {
+	background-color: #0b91ff !important;
+	border-top-left-radius: 999px !important;
+	border-top-right-radius: 999px !important;
+	border-bottom-right-radius: 999px !important;
+}
+
+.message__guestCard {
+	background-color: #e9e9eb !important;
+	border-top-left-radius: 999px !important;
+	border-top-right-radius: 999px !important;
+	border-bottom-right-radius: 999px !important;
 }

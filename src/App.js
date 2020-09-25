@@ -2,22 +2,27 @@ import { Button, FormControl, Input, InputLabel } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Message from "./components/Message";
+import db from "./firebase";
+import firebase from "firebase";
+import FlipMove from "react-flip-move";
+import SendIcon from "@material-ui/icons/Send";
+import { IconButton } from "@material-ui/core";
 
 function App() {
 	const [input, setInput] = useState("");
 	const [messages, setMessages] = useState([
-		{
-			username: "eyup",
-			text: "HEllo everyone",
-		},
-		{
-			username: "everyone",
-			text: "hey eyup",
-		},
-		{
-			username: "dummy",
-			text: "dummy message",
-		},
+		// {
+		// 	username: "eyup1",
+		// 	message: "HEllo everyone",
+		// },
+		// {
+		// 	username: "everyone",
+		// 	message: "hey eyup",
+		// },
+		// {
+		// 	username: "dummy",
+		// 	message: "dummy message",
+		// },
 	]);
 	const [username, setUsername] = useState("");
 
@@ -25,17 +30,37 @@ function App() {
 		setUsername(prompt("Please enter your name"));
 	}, []);
 
+	useEffect(() => {
+		//! Run once when the app component loads
+		db.collection("messages")
+			.orderBy("timestamp", "desc")
+			.onSnapshot((snapshot) => {
+				setMessages(
+					snapshot.docs.map((doc) => ({ id: doc.id, message: doc.data() }))
+				);
+			});
+	}, []);
+
 	const sendMessage = (event) => {
 		event.preventDefault();
 		//! All the logic to send a  message goes here
-		setMessages([...messages, { username: username, text: input }]);
+		db.collection("messages").add({
+			message: input,
+			username: username,
+			timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+		});
+		// setMessages([...messages, { username: username, message: input }]);
 		setInput("");
 	};
 
 	return (
 		<div className="app">
+			<img
+				src="https://facebookbrand.com/wp-content/uploads/2018/09/Header-e1538151782912.png?w=100&h=100"
+				alt=""
+			/>
 			<h1>Facebook Messenger App 🚀 </h1>
-			<h3>Welcome {username}</h3>
+			<h3>Welcome: {username}</h3>
 
 			<form className="app__form">
 				<FormControl className="app__formInput">
@@ -47,22 +72,27 @@ function App() {
 					/>
 				</FormControl>
 
-				<Button
-					className="app_formButton"
+				<IconButton
+					className="app__formButton"
 					variant="contained"
 					color="primary"
 					type="submit"
 					disabled={!input}
 					onClick={sendMessage}
 				>
-					Send
-				</Button>
+					<SendIcon />
+				</IconButton>
+
+				{/* <Button>Send</Button> */}
 			</form>
-			<div className="app_messages">
-				{messages?.map((obj, index) => (
-					<Message key={index} message={obj.text} username={obj.username} />
+
+			<FlipMove className="app__messages">
+				{/* <div className="app__messages"> */}
+				{messages.map(({ message, id }) => (
+					<Message key={id} message={message} username={username} />
 				))}
-			</div>
+				{/* </div> */}
+			</FlipMove>
 		</div>
 	);
 }
