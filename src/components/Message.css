@@ -1,0 +1,13 @@
+/* .message {
+	background-color: #d1d1d1;
+	padding: 10px;
+	border-top-left-radius: 999px;
+	border-top-right-radius: 999px;
+	border-bottom-right-radius: 999px;
+	margin-bottom: 8px;
+} */
+.message__card {
+	padding: 10px;
+	margin: 10px;
+	width: fit-content;
+}
